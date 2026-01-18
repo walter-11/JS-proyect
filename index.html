@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollería Campos Chiclayo</title>
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS11iSJmAdukqeelV_7z63o4rAbq7hJepXKCg&s">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS11iSJmAdukqeelV_7z63o4rAbq7hJepXKCg&s" alt="Campo's Chicken Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="header-title">Pollería Campos</h1>
+                    <p class="header-subtitle">Chiclayo - El Sabor que Enamora</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container main-content">
+        <div class="grid-layout">
+            <!-- PANEL PRINCIPAL -->
+            <div class="productos-section">
+                <!-- BÚSQUEDA Y FILTROS -->
+                <div class="card filters-card">
+                    <div class="filter-grid">
+                        <div class="filter-item">
+                            <label for="busqueda">Buscar Producto</label>
+                            <div class="search-box">
+                                <input 
+                                    type="text" 
+                                    id="busqueda" 
+                                    placeholder="Buscar..."
+                                    onkeyup="filtrarProductos()"
+                                >
+                                <span class="search-icon"></span>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label for="categoria">Categoría</label>
+                            <select id="categoria" onchange="filtrarProductos()">
+                                <option value="todos">Todos</option>
+                                <option value="pollos">Pollos</option>
+                                <option value="acompañamientos">Acompañamientos</option>
+                                <option value="bebidas">Bebidas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRID DE PRODUCTOS -->
+                <div id="productos-grid" class="productos-grid">
+                    <!-- Los productos se cargarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+
+            <!-- CARRITO -->
+            <div class="carrito-section">
+                <div class="card carrito-card">
+                    <div class="carrito-header">
+                        <h2>🛒 Carrito</h2>
+                        <span id="carrito-count" class="badge">0</span>
+                    </div>
+
+                    <!-- ITEMS DEL CARRITO -->
+                    <div id="carrito-items" class="carrito-items">
+                        <p class="empty-cart">Carrito vacío</p>
+                    </div>
+
+                    <!-- DATOS DEL CLIENTE -->
+                    <div id="cliente-section" class="cliente-section" style="display: none;">
+                        <h3>Datos del Cliente</h3>
+                        <input 
+                            type="text" 
+                            id="cliente-nombre" 
+                            placeholder="Nombre *"
+                            onchange="validarCliente()"
+                        >
+                        <input 
+                            type="tel" 
+                            id="cliente-telefono" 
+                            placeholder="Teléfono *"
+                            onchange="validarCliente()"
+                        >
+                        <input 
+                            type="text" 
+                            id="cliente-direccion" 
+                            placeholder="Dirección (solo para delivery)"
+                        >
+                        <label for="numero-mesa">Número de Mesa *</label>
+                        <select id="numero-mesa" onchange="validarCliente(); calcularTotales();">
+                            <option value="">Seleccione una mesa</option>
+                            <option value="1">Mesa 1</option>
+                            <option value="2">Mesa 2</option>
+                            <option value="3">Mesa 3</option>
+                            <option value="4">Mesa 4</option>
+                            <option value="5">Mesa 5</option>
+                            <option value="6">Mesa 6</option>
+                            <option value="7">Mesa 7</option>
+                            <option value="8">Mesa 8</option>
+                            <option value="9">Mesa 9</option>
+                            <option value="10">Mesa 10</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+                    </div>
+
+                    <!-- MÉTODO DE PAGO -->
+                    <div id="pago-section" class="pago-section" style="display: none;">
+                        <label for="metodo-pago">Método de Pago</label>
+                        <select id="metodo-pago">
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                            <option value="yape">Yape</option>
+                            <option value="plin">Plin</option>
+                        </select>
+                    </div>
+
+                    <!-- DESCUENTOS -->
+                    <div id="descuento-section" class="descuento-section" style="display: none;">
+                        <label for="descuento">Aplicar Descuento</label>
+                        <select id="descuento" onchange="calcularTotales()">
+                            <option value="0">Sin descuento</option>
+                            <option value="0.05">5% - Promo del día</option>
+                            <option value="0.10">10% - Cliente frecuente</option>
+                            <option value="0.15">15% - Combo familiar</option>
+                        </select>
+                    </div>
+
+                    
+                    <!-- RESUMEN -->
+                    <div id="resumen-section" class="resumen-section" style="display: none;">
+                        <div class="resumen-item">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">S/ 0.00</span>
+                        </div>
+                        <div class="resumen-item descuento-item" id="descuento-item" style="display: none;">
+                            <span>Descuento (<span id="desc-porcentaje">0</span>%):</span>
+                            <span id="descuento-monto">- S/ 0.00</span>
+                        </div>
+                        <div class="resumen-item delivery-item" id="delivery-item" style="display: none;">
+                            <span>Delivery:</span>
+                            <span>S/ 5.00</span>
+                        </div>
+                        <div class="resumen-item total-item">
+                            <span>TOTAL:</span>
+                            <span id="total">S/ 0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div id="botones-section" style="display: none;">
+                        <button onclick="procesarPedido()" class="btn btn-primary">
+                            Procesar Pedido
+                        </button>
+                        <button onclick="mostrarEstadisticas()" class="btn btn-secondary">
+                            Ver Estadísticas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORIAL DE PEDIDOS -->
+        <div id="historial-section" class="historial-section" style="display: none;">
+            <div class="card">
+                <h2>📋 Historial de Pedidos</h2>
+                <div class="table-container">
+                    <table id="tabla-pedidos">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Mesa</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pedidos-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS11iSJmAdukqeelV_7z63o4rAbq7hJepXKCg&s" alt="Campo's Logo" class="footer-logo">
+        <p>© 2026 Pollería Campos Chiclayo </p>
+        <p class="footer-subtitle">
+            Conceptos: Variables, Funciones, Arrays, Objetos, Eventos, Operadores, Strings, JSON
+        </p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
